@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luyện Tập GDQP - Bài Kiểm Tra</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #e85d04;
+    --accent2: #f48c06;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --correct: #2ea043;
+    --wrong: #da3633;
+    --correct-bg: #0d2b0d;
+    --wrong-bg: #2d0d0d;
+    --neutral-bg: #1c2433;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a0a00 0%, #0d1117 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 20px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(232,93,4,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(232,93,4,0.15);
+    border: 1px solid rgba(232,93,4,0.4);
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 6px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-text { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+  .score-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+
+  /* MAIN */
+  main { max-width: 820px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin: 30px 0 20px;
+  }
+  .section-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-icon.mc { background: rgba(232,93,4,0.15); border: 1px solid rgba(232,93,4,0.3); }
+  .section-icon.tf { background: rgba(46,160,67,0.15); border: 1px solid rgba(46,160,67,0.3); }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .section-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: #444c56; }
+  .q-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* MC OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    width: 100%;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(232,93,4,0.06);
+  }
+  .opt-btn:disabled { cursor: default; }
+  .opt-label {
+    min-width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.18s;
+  }
+  .opt-btn.selected .opt-label { background: var(--accent); color: white; }
+  .opt-btn.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+  }
+  .opt-btn.correct .opt-label { background: var(--correct); color: white; }
+  .opt-btn.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+  }
+  .opt-btn.wrong .opt-label { background: var(--wrong); color: white; }
+  .opt-btn.reveal-correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+  }
+  .opt-btn.reveal-correct .opt-label { background: var(--correct); color: white; }
+
+  /* EXPLANATION */
+  .explanation {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--correct);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: #7ee787;
+    display: none;
+  }
+  .explanation.visible { display: block; }
+  .explanation.wrong-exp { border-left-color: var(--wrong); color: #ff7b72; }
+
+  /* TRUE/FALSE */
+  .tf-statements { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .tf-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .tf-label-tag {
+    min-width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tf-content { flex: 1; font-size: 14px; line-height: 1.5; }
+  .tf-btns {
+    display: flex; gap: 6px; flex-shrink: 0; margin-top: 1px;
+  }
+  .tf-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tf-btn:hover:not(:disabled) { border-color: var(--accent2); color: var(--accent2); }
+  .tf-btn:disabled { cursor: default; }
+  .tf-btn.selected-true { border-color: #2ea043; background: rgba(46,160,67,0.15); color: #7ee787; }
+  .tf-btn.selected-false { border-color: #da3633; background: rgba(218,54,51,0.15); color: #ff7b72; }
+  .tf-btn.correct-true { border-color: #2ea043; background: rgba(46,160,67,0.2); color: #7ee787; }
+  .tf-btn.correct-false { border-color: #da3633; background: rgba(218,54,51,0.2); color: #ff7b72; }
+  .tf-result-icon { font-size: 16px; margin-top: 3px; flex-shrink: 0; }
+
+  /* CHECK BUTTON */
+  .check-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 4px;
+  }
+  .check-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+  .check-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+  .check-btn.checked {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* RESULT PANEL */
+  #result-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .result-emoji { font-size: 48px; margin-bottom: 12px; }
+  .result-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+  .result-score {
+    font-size: 48px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin: 10px 0;
+  }
+  .result-detail { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+  .result-stats {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .stat-chip {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .stat-chip.green { background: var(--correct-bg); color: #7ee787; border: 1px solid var(--correct); }
+  .stat-chip.red { background: var(--wrong-bg); color: #ff7b72; border: 1px solid var(--wrong); }
+  .stat-chip.yellow { background: rgba(244,140,6,0.1); color: var(--accent2); border: 1px solid rgba(244,140,6,0.3); }
+  .retry-btn {
+    padding: 12px 32px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .retry-btn:hover { opacity: 0.88; }
+
+  /* SUBMIT ALL */
+  #submit-all-wrap {
+    text-align: center;
+    margin-top: 32px;
+  }
+  #submit-all-btn {
+    padding: 14px 48px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 4px 24px rgba(232,93,4,0.25);
+  }
+  #submit-all-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+  #submit-all-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 32px 0;
+  }
+
+  @media (max-width: 540px) {
+    .tf-row { flex-wrap: wrap; }
+    .tf-btns { margin-top: 8px; }
+    .opt-btn { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">📚 GDQP &amp; AN — Bài Luyện Tập</div>
+  <h1>Kiểm Tra <span>Giáo Dục</span><br>Quốc Phòng &amp; An Ninh</h1>
+  <p class="subtitle">24 câu trắc nghiệm · 4 câu đúng/sai · Tổng 28 câu</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span class="progress-text" id="progress-text">0 / 28 câu</span>
+  <span class="score-chip" id="score-chip">Điểm: —</span>
+</div>
+
+<main>
+
+  <!-- PART 1 -->
+  <div class="section-header">
+    <div class="section-icon mc">📝</div>
+    <div>
+      <div class="section-title">Phần I — Câu hỏi nhiều lựa chọn</div>
+      <div class="section-desc">Chọn một đáp án đúng nhất (A, B, C hoặc D)</div>
+    </div>
+    <div class="section-count">24 câu</div>
+  </div>
+  <div id="mc-container"></div>
+
+  <div class="divider"></div>
+
+  <!-- PART 2 -->
+  <div class="section-header">
+    <div class="section-icon tf">☑️</div>
+    <div>
+      <div class="section-title">Phần II — Trắc nghiệm đúng/sai</div>
+      <div class="section-desc">Xét tính đúng/sai của từng mệnh đề a, b, c, d</div>
+    </div>
+    <div class="section-count">4 câu</div>
+  </div>
+  <div id="tf-container"></div>
+
+  <div id="submit-all-wrap">
+    <button id="submit-all-btn" onclick="submitAll()">🎯 Nộp bài &amp; Xem kết quả</button>
+  </div>
+
+  <div id="result-panel">
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-title" id="result-title">Kết quả bài làm</div>
+    <div class="result-score" id="result-score">0/28</div>
+    <div class="result-detail" id="result-detail"></div>
+    <div class="result-stats" id="result-stats"></div>
+    <button class="retry-btn" onclick="resetAll()">🔄 Làm lại từ đầu</button>
+  </div>
+
+</main>
+
+<script>
+const MC_DATA = [
+  {
+    q: "Mục tiêu của bạo loạn lật đổ là gây rối loạn an ninh chính trị, trật tự an toàn xã hội hoặc nhằm:",
+    opts: ["Ngăn cản sản xuất","Chiếm đoạt tài sản","Phá hoại văn hóa","Lật đổ chính quyền ở địa phương hay Trung ương"],
+    ans: 3,
+    exp: "Mục tiêu cuối cùng của bạo loạn lật đổ là lật đổ chính quyền ở địa phương hay Trung ương."
+  },
+  {
+    q: "Dựa vào đặc điểm sinh thái thực vật, bên nào của tảng đá độc lập thường có nhiều rêu và ẩm ướt hơn?",
+    opts: ["Hướng Bắc","Hướng Nam","Hướng Tây","Hướng Đông"],
+    ans: 0,
+    exp: "Hướng Bắc ít ánh nắng mặt trời hơn nên ẩm ướt và rêu mọc nhiều hơn."
+  },
+  {
+    q: "Thủ đoạn của các thế lực thù địch trong chiến lược \"diễn biến hoà bình\" nhằm vào QP-AN?",
+    opts: ["Phủ nhận vai trò lãnh đạo của Đảng đối với Quân đội và Công an","Khuyến khích quân đội làm kinh tế","Đoàn kết quân dân","Trang bị vũ khí hiện đại"],
+    ans: 0,
+    exp: "Thủ đoạn cốt lõi là phủ nhận vai trò lãnh đạo của Đảng đối với Quân đội và Công an."
+  },
+  {
+    q: "Trách nhiệm của học sinh trong phòng, chống bạo loạn lật đổ trên không gian mạng?",
+    opts: ["Đồng tình quan điểm trái chiều","Chia sẻ tin nóng","Không xem, nghe, chia sẻ những thông tin xấu độc","Lập hội nhóm bí mật"],
+    ans: 2,
+    exp: "Học sinh cần không xem, nghe, chia sẻ những thông tin xấu độc, tránh tiếp tay cho thù địch."
+  },
+  {
+    q: "Vào ngày trăng non (đầu tháng), hướng đường thẳng từ tâm Mặt Trăng qua phần sáng là hướng:",
+    opts: ["Bắc","Tây","Nam","Đông"],
+    ans: 1,
+    exp: "Vào đầu tháng (trăng non), đường thẳng từ tâm qua phần sáng chỉ hướng Tây."
+  },
+  {
+    q: "Trong bạo loạn lật đổ, các đối tượng thường tập trung đánh chiếm mục tiêu nào trước hết?",
+    opts: ["Trụ sở chính quyền, trung tâm thông tin, ngân hàng","Nhà máy","Khu du lịch","Khu dân cư"],
+    ans: 0,
+    exp: "Đối tượng ưu tiên đánh chiếm là trụ sở chính quyền các cấp, trung tâm thông tin, ngân hàng."
+  },
+  {
+    q: "Bộ đội địa phương làm …… cho toàn dân đánh giặc ở địa phương khi có chiến tranh.",
+    opts: ["Hậu phương","Lực lượng chủ yếu","Đơn vị phối hợp","Nòng cốt"],
+    ans: 3,
+    exp: "Bộ đội địa phương là nòng cốt cho toàn dân đánh giặc ở địa phương."
+  },
+  {
+    q: "Thủ đoạn phá hoại về kinh tế của chiến lược \"diễn biến hoà bình\"?",
+    opts: ["Xuất khẩu lao động","Hỗ trợ vốn","Hình thành các liên minh kinh tế để gây sức ép","Xây dựng khu kinh tế mở"],
+    ans: 2,
+    exp: "Thủ đoạn kinh tế là hình thành các liên minh kinh tế để gây sức ép với Việt Nam."
+  },
+  {
+    q: "Phương châm \"4 tại chỗ\" bao gồm những yếu tố nào?",
+    opts: ["Vũ khí, lương thực","Kế hoạch, kết quả","Chỉ huy, lực lượng, phương tiện, hậu cần tại chỗ","Các cấp hành chính"],
+    ans: 2,
+    exp: "\"4 tại chỗ\" gồm: chỉ huy tại chỗ, lực lượng tại chỗ, phương tiện tại chỗ, hậu cần tại chỗ."
+  },
+  {
+    q: "Một trong những nét truyền thống tiêu biểu của lực lượng vũ trang địa phương?",
+    opts: ["Tuyệt đối trung thành với Tổ quốc, Đảng, Nhà nước","Chỉ làm nhiệm vụ khi có chiến tranh","Độc lập với chính quyền","Ưu tiên lợi ích cá nhân"],
+    ans: 0,
+    exp: "Truyền thống tiêu biểu là tuyệt đối trung thành với Tổ quốc, với Đảng, Nhà nước và nhân dân."
+  },
+  {
+    q: "Lưu ý quan trọng khi sử dụng la bàn (địa bàn)?",
+    opts: ["Dưới nắng","Gần kim loại","Cầm trên tay khi chạy","Không sử dụng gần đường dây cao thế, đường ray, xe cơ giới"],
+    ans: 3,
+    exp: "Không sử dụng la bàn gần đường dây cao thế, đường ray và trong xe cơ giới vì từ trường sẽ làm lệch kim."
+  },
+  {
+    q: "Lực lượng chuyên trách quản lý, bảo vệ biên giới quốc gia?",
+    opts: ["DQTV","Bộ đội địa phương","Bộ đội Biên phòng","Công an xã"],
+    ans: 2,
+    exp: "Bộ đội Biên phòng là lực lượng chuyên trách quản lý, bảo vệ biên giới quốc gia."
+  },
+  {
+    q: "Mối quan hệ giữa \"diễn biến hoà bình\" và bạo loạn lật đổ?",
+    opts: ["Độc lập","Bạo loạn là bước chuẩn bị cho DBHB","Có mối quan hệ biện chứng, tác động lẫn nhau","DBHB xảy ra sau bạo loạn"],
+    ans: 2,
+    exp: "DBHB và bạo loạn lật đổ có mối quan hệ biện chứng, tác động và ảnh hưởng lẫn nhau."
+  },
+  {
+    q: "Bước đầu tiên khi sử dụng la bàn (địa bàn)?",
+    opts: ["Xác định vật chuẩn","Xoay về số 0","Thử bằng sắt","Đặt lên mặt phẳng ngang, mở nắp và chốt hãm nam châm"],
+    ans: 3,
+    exp: "Bước đầu tiên: đặt la bàn lên mặt phẳng ngang, mở nắp và chốt hãm nam châm."
+  },
+  {
+    q: "Lực lượng dự bị động viên được huy động khi nào?",
+    opts: ["Doanh nghiệp cần người","Có lệnh tổng động viên hoặc động viên cục bộ","Hội thao","Lễ hội địa phương"],
+    ans: 1,
+    exp: "Lực lượng dự bị động viên được huy động khi có lệnh tổng động viên hoặc động viên cục bộ."
+  },
+  {
+    q: "Trách nhiệm công dân giữ gìn truyền thống LLVT địa phương?",
+    opts: ["Chỉ tìm hiểu khi yêu cầu","Từ chối huấn luyện","Thực hiện nghĩa vụ quân sự và phong trào Đền ơn đáp nghĩa","Chỉ cần học giỏi"],
+    ans: 2,
+    exp: "Công dân cần thực hiện nghĩa vụ quân sự và tham gia phong trào \"Đền ơn đáp nghĩa\"."
+  },
+  {
+    q: "Xác định hướng Nam bằng Mặt Trời và đồng hồ?",
+    opts: ["Ngược bóng que","Hướng số 12","Đường phân giác của góc hợp bởi kim giờ và số 12","Hướng kim giờ"],
+    ans: 2,
+    exp: "Đường phân giác của góc hợp bởi kim chỉ giờ và số 12 chỉ hướng Nam."
+  },
+  {
+    q: "Cách xử trí khi bị lạc hướng?",
+    opts: ["Giữ im lặng","Bình tĩnh xem xét, có thể quay lại vị trí xuất phát","Đi hướng thuận tiện","Chạy thật nhanh"],
+    ans: 1,
+    exp: "Khi lạc hướng cần bình tĩnh xem xét, có thể quay lại vị trí xuất phát để xác định lại hướng đi."
+  },
+  {
+    q: "Biện pháp chủ yếu của chiến lược \"diễn biến hoà bình\"?",
+    opts: ["Bạo lực vũ trang","Biện pháp phi quân sự","Cấm vận","Quân sự trực tiếp"],
+    ans: 1,
+    exp: "Đặc trưng cốt lõi của DBHB là sử dụng biện pháp phi quân sự."
+  },
+  {
+    q: "Đặc điểm của lực lượng Dân quân tự vệ là:",
+    opts: ["Lực lượng quần chúng không thoát ly sản xuất","Tình nguyện","Thoát ly sản xuất","Thường trực"],
+    ans: 0,
+    exp: "DQTV là lực lượng vũ trang quần chúng không thoát ly sản xuất, công tác."
+  },
+  {
+    q: "Lực lượng vũ trang địa phương bao gồm những thành phần nào?",
+    opts: ["Toàn bộ nam thanh niên","Bộ đội địa phương và DQTV","QĐND và CAND","BĐĐP, Dự bị động viên, DQTV, Công an"],
+    ans: 1,
+    exp: "Lực lượng vũ trang địa phương gồm Bộ đội địa phương và Dân quân tự vệ."
+  },
+  {
+    q: "Tập tính động vật giúp xác định hướng Nam vào mùa hè?",
+    opts: ["Phân chim nhiều dưới gốc cây hướng Nam","Tổ chim quay hướng Bắc","Tổ kiến dày phía Nam","Chim bay về phía Nam"],
+    ans: 0,
+    exp: "Bên có phân chim dưới đất nhiều hơn xung quanh gốc cây thường là hướng Nam."
+  },
+  {
+    q: "Chòm sao hình cái xoong để tìm sao Bắc Cực?",
+    opts: ["Thần Nông","Đại Hùng Tinh","Tiểu Hùng Tinh","Thiên Nga"],
+    ans: 1,
+    exp: "Đại Hùng Tinh (Gấu Lớn) có hình dạng cái xoong, dùng để định vị sao Bắc Cực."
+  },
+  {
+    q: "\"DBHB thực hiện thủ đoạn tư tưởng bằng cách xuyên tạc ……, tư tưởng HCM.\"",
+    opts: ["Lịch sử","Đường lối","Văn hóa","Chủ nghĩa Mác - Lênin"],
+    ans: 3,
+    exp: "DBHB xuyên tạc Chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh để phá hoại tư tưởng."
+  }
+];
+
+const TF_DATA = [
+  {
+    context: "Tình huống về Lực lượng vũ trang địa phương",
+    stmts: [
+      "Vận dụng linh hoạt phương châm \"4 tại chỗ\" là cách thức hoạt động hiệu quả của LLVT địa phương.",
+      "DQTV (Dân quân tự vệ) là lực lượng thoát ly sản xuất.",
+      "Lực lượng dự bị động viên không bao giờ được huy động trong thời bình.",
+      "Bộ đội địa phương được tổ chức ở cấp tỉnh/thành phố trực thuộc Trung ương."
+    ],
+    ans: [true, false, false, true],
+    exp: ["Đúng — Phương châm 4 tại chỗ là nguyên tắc cốt lõi của LLVT địa phương.",
+          "Sai — DQTV không thoát ly sản xuất, công tác (đây là đặc điểm đặc trưng).",
+          "Sai — Dự bị động viên có thể được huy động để huấn luyện trong thời bình.",
+          "Đúng — Bộ đội địa phương tổ chức ở cấp tỉnh/thành phố trực thuộc Trung ương."]
+  },
+  {
+    context: "Tình huống vượt qua địa hình đầm lầy",
+    stmts: [
+      "Khi vượt đầm lầy cần vòng tránh gấp khúc và ước lượng bước chân cẩn thận.",
+      "Khi vượt đầm lầy không cần quan sát và giữ hướng chuẩn.",
+      "Chuẩn bị vật chuẩn (điểm mốc) trước giúp giữ hướng chính xác khi vượt đầm.",
+      "Cần ngắm lại điểm chuẩn sau khi vượt qua đầm lầy để kiểm tra hướng đi."
+    ],
+    ans: [true, false, true, true],
+    exp: ["Đúng — Vòng tránh gấp khúc và ước lượng bước chân là kỹ thuật đúng khi vượt đầm.",
+          "Sai — Phải luôn giữ hướng chuẩn để không bị lạc trong địa hình phức tạp.",
+          "Đúng — Vật chuẩn/điểm mốc giúp định hướng chính xác khi vượt địa hình khó.",
+          "Đúng — Ngắm lại điểm chuẩn sau khi vượt để kiểm tra và hiệu chỉnh hướng đi."]
+  },
+  {
+    context: "Tình huống tìm hướng bằng cây cối và côn trùng",
+    stmts: [
+      "Có thể dựa vào đặc điểm sinh thái của cây độc lập để xác định hướng.",
+      "Phần thân cây sần sùi, nhiều rêu bám là chỉ hướng Nam.",
+      "Phần cành lá xanh tốt hơn, vỏ cây nhẵn hơn là chỉ hướng Nam.",
+      "Thành tổ kiến phía Bắc thường dày hơn để chắn gió lạnh."
+    ],
+    ans: [true, false, true, true],
+    exp: ["Đúng — Đặc điểm sinh thái cây độc lập phản ánh hướng ánh sáng và là cơ sở định hướng.",
+          "Sai — Rêu bám, sần sùi, ẩm ướt là hướng Bắc (ít nắng), không phải hướng Nam.",
+          "Đúng — Phía Nam nhiều nắng nên cành lá xanh tốt hơn, vỏ nhẵn hơn.",
+          "Đúng — Tổ kiến dày phía Bắc để chắn gió lạnh từ hướng Bắc."]
+  },
+  {
+    context: "Tình huống về Facebook và \"Diễn biến hoà bình\" (DBHB)",
+    stmts: [
+      "Việc đăng và lan truyền thông tin xấu độc trên Facebook là hành vi phá hoại quốc phòng và an ninh.",
+      "Khi thấy nội dung lạ, nên lan rộng chia sẻ vào nhóm lớp để mọi người cùng thảo luận.",
+      "Cần cung cấp thông tin về các tài khoản xấu độc cho nhà trường hoặc cơ quan chức năng.",
+      "Phát tán nội dung bôi nhọ lãnh đạo Đảng, Nhà nước trên mạng là hành vi bị nghiêm cấm."
+    ],
+    ans: [true, false, true, true],
+    exp: ["Đúng — Đăng thông tin xấu độc là hành vi tiếp tay, phá hoại quốc phòng và an ninh.",
+          "Sai — Không được chia sẻ, lan rộng nội dung xấu độc, kể cả trong nhóm riêng.",
+          "Đúng — Cần báo cáo ngay cho nhà trường hoặc cơ quan chức năng để xử lý kịp thời.",
+          "Đúng — Đây là hành vi vi phạm pháp luật, bị nghiêm cấm theo quy định."]
+  }
+];
+
+const LABELS = ['A','B','C','D'];
+let mcAnswers = new Array(MC_DATA.length).fill(null);
+let tfAnswers = MC_DATA.map ? TF_DATA.map(q => new Array(q.stmts.length).fill(null)) : [];
+tfAnswers = TF_DATA.map(q => new Array(q.stmts.length).fill(null));
+let submitted = false;
+let answeredCount = 0;
+
+function updateProgress() {
+  let cnt = 0;
+  mcAnswers.forEach(a => { if(a !== null) cnt++; });
+  tfAnswers.forEach(row => row.forEach(a => { if(a !== null) cnt++; }));
+  answeredCount = cnt;
+  const total = MC_DATA.length + TF_DATA.reduce((s,q)=>s+q.stmts.length,0);
+  document.getElementById('progress-fill').style.width = (cnt/total*100)+'%';
+  document.getElementById('progress-text').textContent = cnt + ' / ' + total + ' câu';
+}
+
+function buildMC() {
+  const container = document.getElementById('mc-container');
+  MC_DATA.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'mc-card-'+qi;
+    let optsHtml = q.opts.map((o,oi) => `
+      <button class="opt-btn" id="mc-opt-${qi}-${oi}" onclick="selectMC(${qi},${oi})">
+        <span class="opt-label">${LABELS[oi]}</span>
+        <span>${o}</span>
+      </button>
+    `).join('');
+    card.innerHTML = `
+      <div class="q-num">Câu ${qi+1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="explanation" id="mc-exp-${qi}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectMC(qi, oi) {
+  if(submitted) return;
+  mcAnswers[qi] = oi;
+  LABELS.forEach((_,i) => {
+    const btn = document.getElementById(`mc-opt-${qi}-${i}`);
+    btn.classList.remove('selected');
+  });
+  document.getElementById(`mc-opt-${qi}-${oi}`).classList.add('selected');
+  updateProgress();
+}
+
+function buildTF() {
+  const container = document.getElementById('tf-container');
+  TF_DATA.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'tf-card-'+qi;
+    let stmtsHtml = q.stmts.map((s,si) => `
+      <div class="tf-row" id="tf-row-${qi}-${si}">
+        <div class="tf-label-tag">${LABELS[si]}</div>
+        <div class="tf-content">${s}</div>
+        <div class="tf-btns">
+          <button class="tf-btn" id="tf-t-${qi}-${si}" onclick="selectTF(${qi},${si},true)">Đúng</button>
+          <button class="tf-btn" id="tf-f-${qi}-${si}" onclick="selectTF(${qi},${si},false)">Sai</button>
+        </div>
+        <div class="tf-result-icon" id="tf-icon-${qi}-${si}"></div>
+      </div>
+      <div class="explanation" id="tf-exp-${qi}-${si}"></div>
+    `).join('');
+    card.innerHTML = `
+      <div class="q-num">Câu ${MC_DATA.length + qi + 1}</div>
+      <div class="q-text" style="margin-bottom:6px;font-size:13px;color:var(--text-muted)">📌 ${q.context}</div>
+      <div class="tf-statements">${stmtsHtml}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectTF(qi, si, val) {
+  if(submitted) return;
+  tfAnswers[qi][si] = val;
+  const tBtn = document.getElementById(`tf-t-${qi}-${si}`);
+  const fBtn = document.getElementById(`tf-f-${qi}-${si}`);
+  tBtn.classList.remove('selected-true','selected-false');
+  fBtn.classList.remove('selected-true','selected-false');
+  if(val) tBtn.classList.add('selected-true');
+  else fBtn.classList.add('selected-false');
+  updateProgress();
+}
+
+function submitAll() {
+  submitted = true;
+  document.getElementById('submit-all-btn').disabled = true;
+
+  let mcCorrect = 0, tfCorrect = 0;
+  // Grade MC
+  MC_DATA.forEach((q,qi) => {
+    const userAns = mcAnswers[qi];
+    const correctOpt = document.getElementById(`mc-opt-${qi}-${q.ans}`);
+    correctOpt.classList.add('reveal-correct');
+    if(userAns !== null) {
+      const userOpt = document.getElementById(`mc-opt-${qi}-${userAns}`);
+      if(userAns === q.ans) { userOpt.classList.add('correct'); mcCorrect++; }
+      else { userOpt.classList.add('wrong'); }
+    }
+    // Disable all
+    LABELS.forEach((_,i) => { document.getElementById(`mc-opt-${qi}-${i}`).disabled = true; });
+    // Show explanation
+    const expEl = document.getElementById(`mc-exp-${qi}`);
+    expEl.textContent = '💡 ' + q.exp;
+    expEl.classList.add('visible');
+    if(userAns !== q.ans) expEl.classList.add('wrong-exp');
+  });
+
+  // Grade TF
+  let tfTotal = 0;
+  TF_DATA.forEach((q,qi) => {
+    q.stmts.forEach((_,si) => {
+      tfTotal++;
+      const userAns = tfAnswers[qi][si];
+      const correct = q.ans[si];
+      const tBtn = document.getElementById(`tf-t-${qi}-${si}`);
+      const fBtn = document.getElementById(`tf-f-${qi}-${si}`);
+      tBtn.disabled = true; fBtn.disabled = true;
+      tBtn.classList.remove('selected-true','selected-false');
+      fBtn.classList.remove('selected-true','selected-false');
+      if(correct) tBtn.classList.add('correct-true');
+      else fBtn.classList.add('correct-false');
+      const iconEl = document.getElementById(`tf-icon-${qi}-${si}`);
+      const expEl = document.getElementById(`tf-exp-${qi}-${si}`);
+      expEl.textContent = '💡 ' + q.exp[si];
+      expEl.classList.add('visible');
+      if(userAns !== null) {
+        if(userAns === correct) { iconEl.textContent = '✅'; tfCorrect++; expEl.classList.remove('wrong-exp'); }
+        else { iconEl.textContent = '❌'; expEl.classList.add('wrong-exp'); }
+      } else {
+        iconEl.textContent = '⬜';
+        expEl.classList.add('wrong-exp');
+      }
+    });
+  });
+
+  const total = MC_DATA.length + tfTotal;
+  const totalCorrect = mcCorrect + tfCorrect;
+  showResult(totalCorrect, total, mcCorrect, tfCorrect, tfTotal);
+}
+
+function showResult(correct, total, mcC, tfC, tfT) {
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+
+  const pct = Math.round(correct/total*100);
+  let emoji = '😔', title = 'Cần cố gắng thêm!';
+  if(pct >= 90) { emoji = '🏆'; title = 'Xuất sắc! Bạn làm rất tốt!'; }
+  else if(pct >= 75) { emoji = '🌟'; title = 'Khá giỏi! Tiếp tục phát huy!'; }
+  else if(pct >= 60) { emoji = '👍'; title = 'Đạt yêu cầu! Cần ôn tập thêm.'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-score').textContent = correct + '/' + total;
+  document.getElementById('result-detail').textContent = `Bạn đạt ${pct}% — Phần I: ${mcC}/${MC_DATA.length} · Phần II: ${tfC}/${tfT}`;
+  document.getElementById('result-stats').innerHTML = `
+    <div class="stat-chip green">✅ Đúng: ${correct}</div>
+    <div class="stat-chip red">❌ Sai: ${total - correct}</div>
+    <div class="stat-chip yellow">📊 ${pct}%</div>
+  `;
+  document.getElementById('score-chip').textContent = `Điểm: ${correct}/${total}`;
+}
+
+function resetAll() {
+  submitted = false;
+  mcAnswers = new Array(MC_DATA.length).fill(null);
+  tfAnswers = TF_DATA.map(q => new Array(q.stmts.length).fill(null));
+  document.getElementById('mc-container').innerHTML = '';
+  document.getElementById('tf-container').innerHTML = '';
+  document.getElementById('result-panel').style.display = 'none';
+  document.getElementById('submit-all-btn').disabled = false;
+  document.getElementById('score-chip').textContent = 'Điểm: —';
+  buildMC(); buildTF();
+  updateProgress();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+buildMC();
+buildTF();
+updateProgress();
+</script>
+</body>
+</html>
