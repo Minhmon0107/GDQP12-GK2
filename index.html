@@ -577,7 +577,7 @@ const MC_DATA = [
 
 const TF_DATA = [
   {
-    context: "Tình huống về Lực lượng vũ trang địa phương",
+    context: "Trên trang cá nhân Facebook của mình, bạn Lan thấy một bài viết có nội dung xuyên tạc về lịch sử Quân đội nhân dân Việt Nam, bôi nhọ hình ảnh 'Bộ đội Cụ Hồ' và kêu gọi mọi người chia sẻ để 'thức tỉnh' cộng đồng. Dựa vào tình huống trên và kiến thức về phòng, chống chiến lược \"diễn biến hoà bình\", em hãy cho biết các nhận định sau là đúng hay sai:",
     stmts: [
       "Vận dụng linh hoạt phương châm \"4 tại chỗ\" là cách thức hoạt động hiệu quả của LLVT địa phương.",
       "DQTV (Dân quân tự vệ) là lực lượng thoát ly sản xuất.",
@@ -591,46 +591,46 @@ const TF_DATA = [
           "Đúng — Bộ đội địa phương tổ chức ở cấp tỉnh/thành phố trực thuộc Trung ương."]
   },
   {
-    context: "Tình huống vượt qua địa hình đầm lầy",
+    context:  "Khi thực hiện nhiệm vụ di chuyển đến một địa điểm mới, tổ của Bình phải vượt qua một khu vực có đầm lầy lớn che chắn trên đường đi.",
     stmts: [
-      "Khi vượt đầm lầy cần vòng tránh gấp khúc và ước lượng bước chân cẩn thận.",
-      "Khi vượt đầm lầy không cần quan sát và giữ hướng chuẩn.",
-      "Chuẩn bị vật chuẩn (điểm mốc) trước giúp giữ hướng chính xác khi vượt đầm.",
-      "Cần ngắm lại điểm chuẩn sau khi vượt qua đầm lầy để kiểm tra hướng đi."
+      "Khi gặp đầm lầy, Bình nên kết hợp vòng tránh theo đường gấp khúc và ước lượng cự li bằng bước chân.",
+      "Việc chuẩn bị vật chuẩn dễ nhìn thấy trước khi di chuyển giúp cho việc giữ phương hướng chính xác hơn.",
+      "Trong quá trình di chuyển vòng tránh, không cần quan sát hướng chuẩn mà chỉ cần tập trung vượt qua vật cản.",
+      "Sau khi vượt qua đầm lầy, Bình nên dùng la bàn để ngắm lại điểm chuẩn tiếp theo nhằm giữ đúng hướng."
     ],
-    ans: [true, false, true, true],
+    ans: [true, true, false, true],
     exp: ["Đúng — Vòng tránh gấp khúc và ước lượng bước chân là kỹ thuật đúng khi vượt đầm.",
-          "Sai — Phải luôn giữ hướng chuẩn để không bị lạc trong địa hình phức tạp.",
-          "Đúng — Vật chuẩn/điểm mốc giúp định hướng chính xác khi vượt địa hình khó.",
-          "Đúng — Ngắm lại điểm chuẩn sau khi vượt để kiểm tra và hiệu chỉnh hướng đi."]
+          "Đúng — Phải luôn giữ hướng chuẩn để không bị lạc trong địa hình phức tạp.",
+          "Sai — Phải luôn quan sát và duy trì hướng chuẩn trong suốt quá trình vòng tránh.",
+          "Đúng — Sau khi vượt chướng ngại vật phải ngắm lại điểm chuẩn để hiệu chỉnh hướng."]  
   },
   {
-    context: "Tình huống tìm hướng bằng cây cối và côn trùng",
+    context: "Nhóm của Hùng tham gia hoạt động dã ngoại trong rừng. Do mây mù, nhóm không quan sát được Mặt Trời và cũng không mang theo la bàn. Hùng quan sát các thân cây độc lập xung quanh để tìm hướng Bắc.",
     stmts: [
-      "Có thể dựa vào đặc điểm sinh thái của cây độc lập để xác định hướng.",
-      "Phần thân cây sần sùi, nhiều rêu bám là chỉ hướng Nam.",
-      "Phần cành lá xanh tốt hơn, vỏ cây nhẵn hơn là chỉ hướng Nam.",
-      "Thành tổ kiến phía Bắc thường dày hơn để chắn gió lạnh."
+      "Phía thân cây có cành lá xanh tốt, vỏ cây tròn nhẵn và khô ráo là hướng Nam.",
+      "Dựa vào đặc điểm sinh thái của cây độc lập là một cách tìm phương hướng khi không có công cụ hỗ trợ.",
+      "Nếu gặp một tổ kiến trên cây, Hùng có thể quan sát phía thành tổ dày hơn để xác định hướng Bắc",
+      "Phía thân cây có vỏ sần sùi, ẩm ướt và nhiều rêu bám thường là hướng Nam vì nhận được nhiều ánh sáng."
     ],
-    ans: [true, false, true, true],
-    exp: ["Đúng — Đặc điểm sinh thái cây độc lập phản ánh hướng ánh sáng và là cơ sở định hướng.",
-          "Sai — Rêu bám, sần sùi, ẩm ướt là hướng Bắc (ít nắng), không phải hướng Nam.",
-          "Đúng — Phía Nam nhiều nắng nên cành lá xanh tốt hơn, vỏ nhẵn hơn.",
-          "Đúng — Tổ kiến dày phía Bắc để chắn gió lạnh từ hướng Bắc."]
+    ans: [true, true, true, false],
+    exp: ["Đúng — Hướng Nam nhận được nhiều ánh sáng Mặt Trời hơn, giúp cây quang hợp tốt nên cành lá xanh tươi. Ánh nắng cũng làm vỏ cây khô ráo và ít rêu mốc bám vào nên thường nhẵn hơn.",
+          "Đúng — Đây là một trong những kỹ năng cơ bản trong tự nhiên.",
+          "Đúng — Thành tổ kiến (dưới đất) phía Bắc dày hơn để chắn gió lạnh.",
+          "Sai — Phía nhận được nhiều ánh sáng (hướng Nam) sẽ khô ráo. Ngược lại, phía hướng Bắc ít ánh sáng, ẩm ướt hơn nên mới là nơi rêu bám nhiều và vỏ cây thường sần sùi, mốc hơn."]
   },
   {
-    context: "Tình huống về Facebook và \"Diễn biến hoà bình\" (DBHB)",
+    context: "Trên trang cá nhân Facebook của mình, bạn Lan thấy một bài viết có nội dung xuyên tạc về lịch sử Quân đội nhân dân Việt Nam, bôi nhọ hình ảnh 'Bộ đội Cụ Hồ' và kêu gọi mọi người chia sẻ để 'thức tỉnh' cộng đồng. Dựa vào tình huống trên và kiến thức về phòng, chống chiến lược \"diễn biến hoà bình\", em hãy cho biết các nhận định sau là đúng hay sai:",
     stmts: [
-      "Việc đăng và lan truyền thông tin xấu độc trên Facebook là hành vi phá hoại quốc phòng và an ninh.",
-      "Khi thấy nội dung lạ, nên lan rộng chia sẻ vào nhóm lớp để mọi người cùng thảo luận.",
-      "Cần cung cấp thông tin về các tài khoản xấu độc cho nhà trường hoặc cơ quan chức năng.",
-      "Phát tán nội dung bôi nhọ lãnh đạo Đảng, Nhà nước trên mạng là hành vi bị nghiêm cấm."
+      "Lan cần phát hiện và cung cấp thông tin về bài viết phản động này cho nhà trường hoặc cơ quan chức năng.",
+      "Bài viết trên là một ví dụ về thủ đoạn phá hoại về quốc phòng và an ninh trong chiến lược \"diễn biến hoà bình\".",
+      "Lan nên chia sẻ bài viết này về nhóm lớp để các bạn cùng thảo luận và nhận diện thông tin xấu.",
+      "Việc đăng tải, phát tán nội dung bôi nhọ lãnh đạo, xuyên tạc lịch sử là hành vi bị nghiêm cấm về an ninh mạng."
     ],
-    ans: [true, false, true, true],
-    exp: ["Đúng — Đăng thông tin xấu độc là hành vi tiếp tay, phá hoại quốc phòng và an ninh.",
-          "Sai — Không được chia sẻ, lan rộng nội dung xấu độc, kể cả trong nhóm riêng.",
-          "Đúng — Cần báo cáo ngay cho nhà trường hoặc cơ quan chức năng để xử lý kịp thời.",
-          "Đúng — Đây là hành vi vi phạm pháp luật, bị nghiêm cấm theo quy định."]
+    ans: [true, true, false, true],
+    exp: ["Đúng — Đây là trách nhiệm của công dân trong việc bảo vệ an ninh quốc gia. Việc báo cáo giúp cơ quan chức năng có biện pháp ngăn chặn và xử lý kịp thời các thông tin độc hại.",
+          "Đúng — Một trong những thủ đoạn của \"Diễn biến hòa bình\" là \"phi chính trị hóa\" quân đội, xuyên tạc lịch sử để chia rẽ khối đại đoàn kết và làm mất uy tín của lực lượng quốc phòng.",
+          "Sai — Tuyệt đối không chia sẻ bài viết dưới mọi hình thức, kể cả vào nhóm lớp. Hành động chia sẻ vô tình giúp phát tán thông tin xấu độc đi xa hơn. Lan chỉ nên chụp ảnh màn hình làm bằng chứng để báo cáo cho người có thẩm quyền.",
+          "Đúng — Theo Luật An ninh mạng, các hành vi thông tin sai sự thật gây hoang mang trong nhân dân, xuyên tạc lịch sử, xúc phạm uy tín của cơ quan, tổ chức là hành vi vi phạm pháp luật và sẽ bị xử lý nghiêm."]
   }
 ];
 
